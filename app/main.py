@@ -9,31 +9,28 @@ db = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
 app = fastapi.FastAPI()
 
 class NewsFlow(BaseModel):
-	news: List[int]
+    news: List[int]
 
 class Data(BaseModel):
-	value: str
+    value: str
 
 @app.get('/')
 async def status_report():
-	return {
-		"status": "Redis all green" 
-	}
+    return {
+        "status": "Redis all green" 
+    }
 
 @app.get('/{key}')
 def get_value(key):
-	response = db.get(key)
-	try:
-		return json.loads(response)
-	except:
-		return response
+    response = db.get(key)
+    try:
+        return json.loads(base64.urlsafe_b64decode(response))
+    except:
+        return response
 
 @app.post('/{key}')
 def set_value(key: str, data: Data):
-    try:
-        db.set(key, base64.urlsafe_b64decode(data.value))
-    except:
-        db.set(key, data.value)
+    db.set(key, data.value)
     raise fastapi.HTTPException(200)
 
 @app.get('/top/{datetime}/{quote}')
