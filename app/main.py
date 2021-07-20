@@ -21,12 +21,8 @@ async def status_report():
 
 @app.get('/{key}')
 def get_value(key):
-    response = db.get(key)
-    try:
-        return json.loads(response)
-    except:
-        return response
-
+    response = db.get(key).replace("NaN", "0")
+    return json.loads(response)
 @app.post('/{key}')
 def set_value(key: str, data: Data):
     db.set(key, data.value)
