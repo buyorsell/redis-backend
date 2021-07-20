@@ -11,8 +11,11 @@ app = fastapi.FastAPI()
 class NewsFlow(BaseModel):
 	news: List[int]
 
+class Data(BaseModel):
+	value: str
+
 @app.get('/')
-def status_report():
+async def status_report():
 	return {
 		"status": "Redis all green" 
 	}
@@ -25,12 +28,12 @@ def get_value(key):
 	except:
 		return response
 
-@app.post('/{key}/{value}')
-def set_value(key, value):
+@app.post('/{key}')
+def set_value(key: str, data: Data):
     try:
-        db.set(key, base64.urlsafe_b64decode(value))
+        db.set(key, base64.urlsafe_b64decode(data.value))
     except:
-        db.set(key, value)
+        db.set(key, data.value)
     raise fastapi.HTTPException(200)
 
 @app.get('/top/{datetime}/{quote}')
