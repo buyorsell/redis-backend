@@ -2,7 +2,6 @@ import redis
 import fastapi, json
 from pydantic import BaseModel
 from typing import List
-import base64
 
 db = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
 
@@ -24,7 +23,7 @@ async def status_report():
 def get_value(key):
     response = db.get(key)
     try:
-        return json.loads(base64.urlsafe_b64decode(response))
+        return json.loads(response)
     except:
         return response
 
