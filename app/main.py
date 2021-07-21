@@ -9,6 +9,12 @@ app = fastapi.FastAPI()
 
 class NewsFlow(BaseModel):
     news: List[int]
+    bos_positive: float
+    bos_negative: float
+    num_negative: int
+    num_positive: int
+    start_period: str
+    end_period: str   
 
 class Data(BaseModel):
     value: str
