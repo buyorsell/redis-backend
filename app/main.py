@@ -12,9 +12,7 @@ class NewsFlow(BaseModel):
     bos_positive: float
     bos_negative: float
     num_negative: int
-    num_positive: int
-    start_period: str
-    end_period: str   
+    num_positive: int 
 
 class Data(BaseModel):
     value: str
